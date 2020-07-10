@@ -1,0 +1,11 @@
+*/Build
+*/Binaries
+*/DerivedDataCache
+*/Intermediate
+*/Saved
+*.VC.db
+*.suo
+*.VC.opendb
+*.sln
+
+!Build/**/*.ico
