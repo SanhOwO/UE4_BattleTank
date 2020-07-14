@@ -7,5 +7,5 @@
 *.suo
 *.VC.opendb
 *.sln
-
+*.vs
 !Build/**/*.ico

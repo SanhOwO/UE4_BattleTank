@@ -1,0 +1,18 @@
+{
+	"source": "UE",
+	"applications": [
+		{
+			"app_key": "application.generated.ue.battle_tank-13594126.ue4editor.exe",
+			"launch_type": "url",
+			"url": "steam://launch/",
+			"action_manifest_path": "G:/UE4Project/UE4_BattleTank/Battle_Tank/Config/SteamVRBindings/steamvr_manifest.json",
+			"strings":
+			{
+				"en_us":
+				{
+					"name": "Battle_Tank-13594126 [UE Editor]"
+				}
+			}
+		}
+	]
+}
