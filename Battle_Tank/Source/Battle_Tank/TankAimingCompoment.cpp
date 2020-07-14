@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "TankAimingCompoment.h"
 
 // Sets default values for this component's properties
@@ -56,7 +57,7 @@ void UTankAimingCompoment::AimAt(FVector HitLocation, float LaunchSpeed)
 
 	if (bHaveAimSolution) {
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		MoveBarrelToward(AimDirection);
+		MoveBarrel_TurretToward(AimDirection);
 
 
 		auto TankName = GetOwner()->GetName();
@@ -72,18 +73,29 @@ void UTankAimingCompoment::AimAt(FVector HitLocation, float LaunchSpeed)
 
 void UTankAimingCompoment::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
+	if (!BarrelToSet) return;
 	Barrel = BarrelToSet;
-
 }
 
-void UTankAimingCompoment::MoveBarrelToward(FVector AimDirection)
+void UTankAimingCompoment::SetTurretReference(UTankTurret* TurretToSet)
+{
+	if (!TurretToSet) return;
+	Turret = TurretToSet;
+	//UE_LOG(LogTemp, Error, TEXT("Turret: %s "), *Turret->GetName());
+}
+
+void UTankAimingCompoment::MoveBarrel_TurretToward(FVector AimDirection)
 {
 	auto BarrelRotation = Barrel->GetForwardVector().Rotation();
+	auto TurretRotation = Turret->GetForwardVector().Rotation();
+
 	auto AimAsRotator = AimDirection.Rotation();
-	auto DeltaRotator = AimAsRotator - BarrelRotation;
+	auto Barrel_DeltaRotator = AimAsRotator - BarrelRotation;
+	auto Turret_DeltaRotator = AimAsRotator - TurretRotation;
 
-	Barrel->Eleate(DeltaRotator.Pitch);
-
-	//UE_LOG(LogTemp, Error, TEXT("Barrel: %s, AimRoatter: %s "), *BarrelRotation.ToString(),*AimAsRotator.ToString());
+	Barrel->Eleate(Barrel_DeltaRotator.Pitch);
+	Turret->Eleate(Turret_DeltaRotator.Yaw);
+	
+	UE_LOG(LogTemp, Error, TEXT("Turret: %s, AimRoatter: %s "), *TurretRotation.ToString(),*AimAsRotator.ToString());
 }
 

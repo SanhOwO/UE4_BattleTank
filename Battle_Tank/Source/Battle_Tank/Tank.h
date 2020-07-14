@@ -3,6 +3,7 @@
 #pragma once
 
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "TankAimingCompoment.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
@@ -38,4 +39,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetTurretReference(UTankTurret* TurretToSet);
 };
