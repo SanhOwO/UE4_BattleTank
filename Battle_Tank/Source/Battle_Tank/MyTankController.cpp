@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+
 #include "MyTankController.h"
 
 
@@ -14,7 +15,7 @@ void AMyTankController::AimTowardCorsshair() {
 	if (GetSightRayHitLoaction(OutHitLocation)) {
 		//UE_LOG(LogTemp, Warning, TEXT("HitLocation£º %s"), *OutHitLocation.ToString());
 	}
-	}
+}
 	
 
 bool AMyTankController::GetSightRayHitLoaction(FVector& OutHitLocation) const{
@@ -77,5 +78,4 @@ void AMyTankController::BeginPlay() {
 void AMyTankController::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 	AimTowardCorsshair();
-	UE_LOG(LogTemp, Error, TEXT("FiresPlayerControler is: %s"), *(GetWorld()->GetFirstPlayerController()->GetPawn()->GetName()));
 }
