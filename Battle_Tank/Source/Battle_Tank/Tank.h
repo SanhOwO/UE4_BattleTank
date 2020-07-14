@@ -2,10 +2,13 @@
 
 #pragma once
 
+#include "TankBarrel.h"
 #include "TankAimingCompoment.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
+
+//class UTankBarrel;
 
 UCLASS()
 class BATTLE_TANK_API ATank : public APawn
@@ -26,9 +29,6 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -37,5 +37,5 @@ public:
 	//可以再蓝图被调用
 	
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
+	void SetBarrelReference(UTankBarrel* BarrelToSet);
 };
