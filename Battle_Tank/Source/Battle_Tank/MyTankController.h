@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "TankAimingCompoment.h"
 #include "Tank.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
@@ -16,7 +17,8 @@ class BATTLE_TANK_API AMyTankController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	//UFUNCTION(BlueprintCallable, Category = "Setup")
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void FoundAimingComponent(UTankAimingCompoment* AimRef);
 	virtual void BeginPlay() override;	//Virtual 函数 覆盖原有的beginplay 声明的时候不用virtual和override
 	virtual void Tick(float) override;
 

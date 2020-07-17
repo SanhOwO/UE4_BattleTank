@@ -1,7 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MyTankController.h"
-#include "TankAimingCompoment.h"
+
+
+void AMyTankController::BeginPlay() {
+	Super::BeginPlay();
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingCompoment>();
+	if (AimingComponent) 
+		FoundAimingComponent(AimingComponent);
+	else
+		UE_LOG(LogTemp, Warning, TEXT("No Aiming Component 12"));
+	UE_LOG(LogTemp, Warning, TEXT("Player Controller Begin Play"));
+}
+
+void AMyTankController::Tick(float DeltaTime) {
+	Super::Tick(DeltaTime);
+	AimTowardCorsshair();
+}
 
 void AMyTankController::AimTowardCorsshair() {
 	FVector OutHitLocation;
@@ -50,15 +65,4 @@ bool AMyTankController::GetLookDirection(FVector2D ScreenLocation, FVector& Look
 	FVector WorldLocation;
 	DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldLocation, LookDircetion);
 	return true;
-}
-
-void AMyTankController::BeginPlay() {
-	Super::BeginPlay();
-
-	UE_LOG(LogTemp, Warning, TEXT("Player Controller Begin Play"));
-}
-
-void AMyTankController::Tick(float DeltaTime) {
-	Super::Tick(DeltaTime);
-	AimTowardCorsshair();
 }

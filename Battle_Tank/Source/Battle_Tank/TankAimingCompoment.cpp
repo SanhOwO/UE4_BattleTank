@@ -20,8 +20,13 @@ UTankAimingCompoment::UTankAimingCompoment()
 void UTankAimingCompoment::BeginPlay()
 {
 	//Super::BeginPlay();
+	FiringState = EFiringState::Aiming;
 
-	// ...
+}
+
+void UTankAimingCompoment::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
+{
+	
 }
 
 void UTankAimingCompoment::AimAt(FVector HitLocation)
@@ -97,7 +102,7 @@ void UTankAimingCompoment::MoveBarrel_TurretToward(FVector AimDirection)
 
 void UTankAimingCompoment::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Tyr to Fire"));
+	//UE_LOG(LogTemp, Warning, TEXT("Try to Fire"));
 	if (!Barrel) { UE_LOG(LogTemp, Warning, TEXT("Has no Barrel 102 ")); return; }
 	if (!ProjectileBluePrint) { UE_LOG(LogTemp, Warning, TEXT("Has no Projectile 103 ")); return; }
 
