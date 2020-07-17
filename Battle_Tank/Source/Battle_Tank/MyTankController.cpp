@@ -1,16 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "TankAimingCompoment.h"
 #include "MyTankController.h"
 
 
-ATank* AMyTankController::GetControlledTank() const {
-	return Cast<ATank>(GetPawn());
-}
-
 void AMyTankController::AimTowardCorsshair() {
-	if (!GetControlledTank()) return;
-
 	FVector OutHitLocation;
 	if (GetSightRayHitLoaction(OutHitLocation)) {
 		//UE_LOG(LogTemp, Warning, TEXT("HitLocation£º %s"), *OutHitLocation.ToString());
@@ -26,7 +20,7 @@ bool AMyTankController::GetSightRayHitLoaction(FVector& OutHitLocation) const{
 	FVector WorldDirection;
 	if (GetLookDirection(ScreenLocation, WorldDirection)) {
 		if (GetLookVectorHitLocation(WorldDirection, OutHitLocation)) {
-			GetControlledTank()->AimAt(OutHitLocation);
+			GetPawn()->FindComponentByClass<UTankAimingCompoment>()->AimAt(OutHitLocation);
 		}
 			
 	}
@@ -61,16 +55,6 @@ bool AMyTankController::GetLookDirection(FVector2D ScreenLocation, FVector& Look
 
 void AMyTankController::BeginPlay() {
 	Super::BeginPlay();
-	
-	auto ControlTank = GetControlledTank();
-	if (!ControlTank) 
-	{
-		UE_LOG(LogTemp, Error, TEXT("Player Controller not processing a tank"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Controller processing %s"),*(ControlTank->GetName()));
-	}
 
 	UE_LOG(LogTemp, Warning, TEXT("Player Controller Begin Play"));
 }

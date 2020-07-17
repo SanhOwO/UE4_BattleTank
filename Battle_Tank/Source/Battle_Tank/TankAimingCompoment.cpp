@@ -1,5 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "Projectile.h"
+#include "DrawDebugHelpers.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
 #include "TankAimingCompoment.h"
@@ -23,18 +25,7 @@ void UTankAimingCompoment::BeginPlay()
 	
 }
 
-
-// Called every frame
-/*void UTankAimingCompoment::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}*/
-
-
-
-void UTankAimingCompoment::AimAt(FVector HitLocation, float LaunchSpeed)
+void UTankAimingCompoment::AimAt(FVector HitLocation)
 {
 	if (!Barrel) {
 		UE_LOG(LogTemp, Error, TEXT("No Barriel Found"));
@@ -54,48 +45,80 @@ void UTankAimingCompoment::AimAt(FVector HitLocation, float LaunchSpeed)
 		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
-
+	DrawDebugLine(
+		GetWorld(),
+		StartLocation,
+		HitLocation,
+		FColor::Blue,
+		false
+	);
 	if (bHaveAimSolution) {
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		
 		MoveBarrel_TurretToward(AimDirection);
 
 
 		auto TankName = GetOwner()->GetName();
 		auto Time = GetWorld()->GetTimeSeconds();
-		//UE_LOG(LogTemp, Warning, TEXT("%f: Aim Sol Found"), Time);
+		//UE_LOG(LogTemp, Warning, TEXT("%s: Aim Sol Found"), *AimDirection.ToString());
 	}
 	else {
-		auto Time = GetWorld()->GetTimeSeconds();
+		///auto Time = GetWorld()->GetTimeSeconds();
 		//UE_LOG(LogTemp, Warning, TEXT("%f: No Aim Sol Found"), Time);
 	}
 }
 
 
-void UTankAimingCompoment::SetBarrelReference(UTankBarrel* BarrelToSet)
+void UTankAimingCompoment::Initial(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
 {
-	if (!BarrelToSet) return;
 	Barrel = BarrelToSet;
-}
-
-void UTankAimingCompoment::SetTurretReference(UTankTurret* TurretToSet)
-{
-	if (!TurretToSet) return;
 	Turret = TurretToSet;
-	//UE_LOG(LogTemp, Error, TEXT("Turret: %s "), *Turret->GetName());
 }
 
 void UTankAimingCompoment::MoveBarrel_TurretToward(FVector AimDirection)
 {
+	if (!Barrel || !Turret) {
+		return;
+	}
 	auto BarrelRotation = Barrel->GetForwardVector().Rotation();
 	auto TurretRotation = Turret->GetForwardVector().Rotation();
-
+	//UE_LOG(LogTemp, Warning, TEXT("%s: TurretRotation"), *TurretRotation.ToString());
 	auto AimAsRotator = AimDirection.Rotation();
 	auto Barrel_DeltaRotator = AimAsRotator - BarrelRotation;
 	auto Turret_DeltaRotator = AimAsRotator - TurretRotation;
+	//Turret_DeltaRotator.Yaw = abs(AimAsRotator.Yaw) - TurretRotation.Yaw;
+	
+		
 
 	Barrel->Eleate(Barrel_DeltaRotator.Pitch);
 	Turret->Eleate(Turret_DeltaRotator.Yaw);
 	
-	UE_LOG(LogTemp, Error, TEXT("Turret: %s, AimRoatter: %s "), *TurretRotation.ToString(),*AimAsRotator.ToString());
+	//UE_LOG(LogTemp, Error, TEXT("Turret: %s, AimRoatter: %s "), *TurretRotation.ToString(),*AimAsRotator.ToString());
 }
 
+void UTankAimingCompoment::Fire()
+{
+	if (!Barrel) { return; }
+	if (!ProjectileBluePrint) { return; }
+
+	int NowTime = FPlatformTime::Seconds();
+	bool bIsReloaded = (NowTime - LastTime) > ReloadTime;
+
+	if (bIsReloaded && Barrel) {
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBluePrint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+		if (Projectile == NULL)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("not spawn any projectile"));
+			return;
+		}
+		Projectile->LaunchProjectile(LaunchSpeed);
+
+		LastTime = NowTime;
+	}
+	//Projectile->LaunchProjectile(1000);
+
+}

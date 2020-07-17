@@ -2,6 +2,7 @@
 
 #pragma once
 
+
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
 #include "TankTurret.generated.h"
@@ -20,5 +21,5 @@ public:
 
 private:
 	UPROPERTY(EditAnyWhere, Category = Setup)
-		float MaxDegreePerSecond = 0.01f;
+	float MaxDegreePerSecond = 0.01f;
 };

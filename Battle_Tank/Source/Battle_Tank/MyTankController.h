@@ -16,7 +16,7 @@ class BATTLE_TANK_API AMyTankController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	ATank* GetControlledTank() const;
+	//UFUNCTION(BlueprintCallable, Category = "Setup")
 	virtual void BeginPlay() override;	//Virtual 函数 覆盖原有的beginplay 声明的时候不用virtual和override
 	virtual void Tick(float) override;
 

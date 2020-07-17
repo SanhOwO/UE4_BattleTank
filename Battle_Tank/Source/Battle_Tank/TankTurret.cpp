@@ -9,5 +9,5 @@ void UTankTurret::Eleate(float RelativeSpeed)
 	auto ElevationChange = RelativeSpeed * MaxDegreePerSecond * GetWorld()->GetTimeSeconds();
 	auto NewElevation = GetRelativeRotation().Yaw + ElevationChange;
 	SetRelativeRotation(FRotator(0, NewElevation,0));
-	//UE_LOG(LogTemp, Warning, TEXT("Turret: %f "), NewElevation);
+	//UE_LOG(LogTemp, Warning, TEXT("Turret: %f "), ElevationChange);
 }

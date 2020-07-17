@@ -22,6 +22,6 @@ public:
 	virtual void Tick(float) override;
 
 private:
-	ATank* GetControlledTank() const;
-	ATank* GetPlayerTank() const;
+	//AI离目标的最近距离
+	float AcceptanceRadius = 30.f;
 };
