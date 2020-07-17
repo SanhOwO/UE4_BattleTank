@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Wheel.h"
@@ -11,18 +11,19 @@ UWheel::UWheel()
 
 void UWheel::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
-	//ĞŞÕıÆ®Òİ °Ñµ¥´¿¸øÂÖ×ÓµÄÁ¦ ·Ö¸øÖ÷Ìå
+	//ä¿®å¤é£˜é€¸ æŠŠè½®å­çš„åŠ›ä¼ ç»™ä¸»ä½“
 	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
-	auto CorrectionAcceleration = - SlippageSpeed / DeltaTime * GetRightVector(); //ËÙ¶È³ıÒÔtime
+	auto CorrectionAcceleration = -SlippageSpeed / DeltaTime * GetRightVector(); //ï¿½Ù¶È³ï¿½ï¿½ï¿½time
 	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
-	auto CorrectionForce = (TankRoot->GetMass() * CorrectionAcceleration) / 2; //Á½¸öÂÖ×Ó
+	auto CorrectionForce = (TankRoot->GetMass() * CorrectionAcceleration) / 2; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	TankRoot->AddForce(CorrectionForce);
 }
+
 
 void UWheel::SetWheel(float wheel)
 {
 	auto ForceApply = GetForwardVector() * wheel * TrackMaxDrivingForce;
 	auto ForceLocation = GetComponentLocation();
-	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());	//²é¿´ Àà²é¿´Æ÷
+	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());	//æŸ¥çœ‹ ç±»æŸ¥çœ‹å™¨
 	TankRoot->AddForceAtLocation(ForceApply, ForceLocation);
 }

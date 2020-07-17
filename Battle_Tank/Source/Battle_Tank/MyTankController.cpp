@@ -20,12 +20,13 @@ void AMyTankController::Tick(float DeltaTime) {
 
 void AMyTankController::AimTowardCorsshair() {
 	FVector OutHitLocation;
-	GetSightRayHitLoaction(OutHitLocation);
+	if (GetSightRayHitLoaction(OutHitLocation)) {
+		//UE_LOG(LogTemp, Warning, TEXT("HitLocation： %s"), *OutHitLocation.ToString());
+	}
 }
 	
 
-void AMyTankController::GetSightRayHitLoaction(FVector& OutHitLocation) const{
-	if (!GetPawn()) { return; }
+bool AMyTankController::GetSightRayHitLoaction(FVector& OutHitLocation) const{
 	int32 ViewPortSizeX, ViewPortSizeY;
 	GetViewportSize(ViewPortSizeX, ViewPortSizeY);//获得视口的长宽
 	auto ScreenLocation = FVector2D(ViewPortSizeX * CrosshairXLocation, ViewPortSizeY * CrosshairYLocation);
@@ -37,7 +38,9 @@ void AMyTankController::GetSightRayHitLoaction(FVector& OutHitLocation) const{
 		}
 			
 	}
+
 	OutHitLocation = FVector(1.0);
+	return true;
 }
 
 bool AMyTankController::GetLookVectorHitLocation(FVector LookDirection, FVector& Hitlocation) const {

@@ -24,7 +24,7 @@ public:
 
 private:
 	void AimTowardCorsshair();//移动炮管 根据准心位置
-	void GetSightRayHitLoaction(FVector&) const;
+	bool GetSightRayHitLoaction(FVector&) const;
 	bool GetLookVectorHitLocation(FVector, FVector&) const;
 	bool GetLookDirection(FVector2D, FVector&) const;
 	UPROPERTY(EditAnyWhere);

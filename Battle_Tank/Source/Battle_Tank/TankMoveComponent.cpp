@@ -23,30 +23,17 @@ void UTankMoveComponent::RequestDirectMove(const FVector& MoveVelocity, bool bFo
 	auto ForwardThrow = FVector::DotProduct(TankForward, AIForwardIntention);
 
 	auto RightThrow = FVector::CrossProduct(TankForward, AIForwardIntention).Z;
-
-	auto Name = GetOwner()->GetName();
-	//auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
-	if (IsFalling())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s move is falling"), *Name);
-		return;
-	}
 	IntendTurnRight(RightThrow);
 	//auto Throw = (ForwardThrow > 0 ? 1 : -1);
 	IntendMoveForward(ForwardThrow);
 
-	
+	auto Name = GetOwner()->GetName();
 	//UE_LOG(LogTemp, Warning, TEXT("%s vectoring is %f"), *Name, ForwardThrow);
 }
 
 void UTankMoveComponent::IntendMoveForward(float wheel)
 {
 	auto Name = GetOwner()->GetName();
-	if (IsFalling())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s move is falling"), *Name);
-		return;
-	}
 	//UE_LOG(LogTemp, Warning, TEXT("%s move forward %f"), *Name, wheel);
 	if (!RightWheel || !LeftWheel)
 	{
@@ -61,11 +48,6 @@ void UTankMoveComponent::IntendMoveForward(float wheel)
 void UTankMoveComponent::IntendTurnRight(float wheel)
 {
 	auto Name = GetName();
-	if (IsFalling())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s move is falling"), *Name);
-		return;
-	}
 	//UE_LOG(LogTemp, Warning, TEXT("%s move forward %f"), *Name, wheel);
 	if (!RightWheel || !LeftWheel)
 	{
@@ -79,12 +61,7 @@ void UTankMoveComponent::IntendTurnRight(float wheel)
 
 void UTankMoveComponent::IntendTurnLeft(float wheel)
 {
-	auto Name = GetName();
-	if (IsFalling())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s move is falling"), *Name);
-		return;
-	}
+	//auto Name = GetName();
 	//UE_LOG(LogTemp, Warning, TEXT("%s move forward %f"), *Name, wheel);
 	if (!RightWheel || !LeftWheel)
 	{
