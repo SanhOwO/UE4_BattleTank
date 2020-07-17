@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Battle_Tank.h"
 #include "TankBarrel.h"
+#include "Battle_Tank.h"
+
 
 void UTankBarrel::Eleate(float RelativeSpeed)
 {

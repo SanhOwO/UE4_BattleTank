@@ -25,6 +25,8 @@ class BATTLE_TANK_API UTankAimingCompoment : public UActorComponent
 	GENERATED_BODY()
 
 private:
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
 	UPROPERTY(EditAnyWhere)
 
 	float LaunchSpeed = 4000.f; // 100m/s

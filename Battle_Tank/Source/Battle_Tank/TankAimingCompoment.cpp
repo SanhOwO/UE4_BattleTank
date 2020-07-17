@@ -1,10 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "TankAimingCompoment.h"
 #include "Projectile.h"
 #include "DrawDebugHelpers.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
-#include "TankAimingCompoment.h"
+
 
 // Sets default values for this component's properties
 UTankAimingCompoment::UTankAimingCompoment()
@@ -16,13 +17,21 @@ UTankAimingCompoment::UTankAimingCompoment()
 	// ...
 }
 
+
+void UTankAimingCompoment::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	int NowTime = FPlatformTime::Seconds();
+	bool bIsReloaded = (NowTime - LastTime) > ReloadTime;
+	if (bIsReloaded) {
+		FiringState = EFiringState::Reloading;
+	}
+}
+
 // Called when the game starts
 void UTankAimingCompoment::BeginPlay()
 {
-	Super::BeginPlay();
-
-	// ...
-	
+	LastTime = FPlatformTime::Seconds();
+	FiringState = EFiringState::Reloading;
 }
 
 void UTankAimingCompoment::AimAt(FVector HitLocation)
@@ -98,27 +107,27 @@ void UTankAimingCompoment::MoveBarrel_TurretToward(FVector AimDirection)
 
 void UTankAimingCompoment::Fire()
 {
-	if (!Barrel) { return; }
-	if (!ProjectileBluePrint) { return; }
+	if (FiringState != EFiringState::Reloading) {
+		if (!Barrel) { return; }
+		if (!ProjectileBluePrint) { return; }
 
-	int NowTime = FPlatformTime::Seconds();
-	bool bIsReloaded = (NowTime - LastTime) > ReloadTime;
+		if (Barrel) {
+			auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+				ProjectileBluePrint,
+				Barrel->GetSocketLocation(FName("Projectile")),
+				Barrel->GetSocketRotation(FName("Projectile"))
+				);
+			if (Projectile == NULL)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("not spawn any projectile"));
+				return;
+			}
+			Projectile->LaunchProjectile(LaunchSpeed);
 
-	if (bIsReloaded && Barrel) {
-		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-			ProjectileBluePrint,
-			Barrel->GetSocketLocation(FName("Projectile")),
-			Barrel->GetSocketRotation(FName("Projectile"))
-			);
-		if (Projectile == NULL)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("not spawn any projectile"));
-			return;
+			LastTime = FPlatformTime::Seconds();
 		}
-		Projectile->LaunchProjectile(LaunchSpeed);
-
-		LastTime = NowTime;
 	}
+	
 	//Projectile->LaunchProjectile(1000);
 
 }
