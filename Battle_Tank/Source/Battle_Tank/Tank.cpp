@@ -1,7 +1,7 @@
  // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Tank.h"
 #include "Projectile.h"
+#include "Tank.h"
 
 
 // Sets default values
@@ -36,7 +36,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	//TankAimingConpoment->AimAt(HitLocation, LaunchSpeed);
 	//auto TankName = GetName();
 	//UE_LOG(LogTemp, Warning, TEXT("%s is aiming at %s"), *TankName,*HitLocation.ToString());
-}*/
+}
 
 void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
 {
@@ -44,7 +44,7 @@ void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
 	//TankAimingConpoment->SetBarrelReference(BarrelToSet);
 	Barrel = BarrelToSet;
 }
-/*
+
 void ATank::Fire()
 {
 	if (!Barrel) { return; }

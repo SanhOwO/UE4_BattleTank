@@ -1,11 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "TankAimingCompoment.h"
 #include "Projectile.h"
 #include "DrawDebugHelpers.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
-
+#include "TankAimingCompoment.h"
 
 // Sets default values for this component's properties
 UTankAimingCompoment::UTankAimingCompoment()
@@ -17,21 +16,12 @@ UTankAimingCompoment::UTankAimingCompoment()
 	// ...
 }
 
-
-void UTankAimingCompoment::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	int NowTime = FPlatformTime::Seconds();
-	bool bIsReloaded = (NowTime - LastTime) > ReloadTime;
-	if (bIsReloaded) {
-		FiringState = EFiringState::Reloading;
-	}
-}
-
 // Called when the game starts
 void UTankAimingCompoment::BeginPlay()
 {
-	LastTime = FPlatformTime::Seconds();
-	FiringState = EFiringState::Reloading;
+	//Super::BeginPlay();
+
+	// ...
 }
 
 void UTankAimingCompoment::AimAt(FVector HitLocation)
@@ -63,7 +53,7 @@ void UTankAimingCompoment::AimAt(FVector HitLocation)
 	);
 	if (bHaveAimSolution) {
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		
+
 		MoveBarrel_TurretToward(AimDirection);
 
 
@@ -96,38 +86,40 @@ void UTankAimingCompoment::MoveBarrel_TurretToward(FVector AimDirection)
 	auto Barrel_DeltaRotator = AimAsRotator - BarrelRotation;
 	auto Turret_DeltaRotator = AimAsRotator - TurretRotation;
 	//Turret_DeltaRotator.Yaw = abs(AimAsRotator.Yaw) - TurretRotation.Yaw;
-	
-		
+
+
 
 	Barrel->Eleate(Barrel_DeltaRotator.Pitch);
 	Turret->Eleate(Turret_DeltaRotator.Yaw);
-	
+
 	//UE_LOG(LogTemp, Error, TEXT("Turret: %s, AimRoatter: %s "), *TurretRotation.ToString(),*AimAsRotator.ToString());
 }
 
 void UTankAimingCompoment::Fire()
 {
-	if (FiringState != EFiringState::Reloading) {
-		if (!Barrel) { return; }
-		if (!ProjectileBluePrint) { return; }
+	UE_LOG(LogTemp, Warning, TEXT("Tyr to Fire"));
+	if (!Barrel) { UE_LOG(LogTemp, Warning, TEXT("Has no Barrel 102 ")); return; }
+	if (!ProjectileBluePrint) { UE_LOG(LogTemp, Warning, TEXT("Has no Projectile 103 ")); return; }
 
-		if (Barrel) {
-			auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-				ProjectileBluePrint,
-				Barrel->GetSocketLocation(FName("Projectile")),
-				Barrel->GetSocketRotation(FName("Projectile"))
-				);
-			if (Projectile == NULL)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("not spawn any projectile"));
-				return;
-			}
-			Projectile->LaunchProjectile(LaunchSpeed);
+	int NowTime = FPlatformTime::Seconds();
+	bool bIsReloaded = (NowTime - LastTime) > ReloadTime;
 
-			LastTime = FPlatformTime::Seconds();
+	if (bIsReloaded && Barrel) {
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBluePrint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+		if (Projectile == NULL)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("not spawn any projectile"));
+			return;
 		}
+		Projectile->LaunchProjectile(LaunchSpeed);
+
+		LastTime = NowTime;
 	}
-	
+
 	//Projectile->LaunchProjectile(1000);
 
 }

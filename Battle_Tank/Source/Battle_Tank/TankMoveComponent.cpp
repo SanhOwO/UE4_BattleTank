@@ -28,7 +28,7 @@ void UTankMoveComponent::RequestDirectMove(const FVector& MoveVelocity, bool bFo
 	IntendMoveForward(ForwardThrow);
 
 	auto Name = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s vectoring is %f"), *Name, ForwardThrow);
+	//UE_LOG(LogTemp, Warning, TEXT("%s vectoring is %f"), *Name, ForwardThrow);
 }
 
 void UTankMoveComponent::IntendMoveForward(float wheel)

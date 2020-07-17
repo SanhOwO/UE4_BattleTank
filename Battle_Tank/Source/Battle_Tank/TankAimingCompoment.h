@@ -19,16 +19,13 @@ class UTankBarrel;
 class UTankTurret;
 class AProjectile;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLE_TANK_API UTankAimingCompoment : public UActorComponent
 {
 	GENERATED_BODY()
 
 private:
-	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
 	UPROPERTY(EditAnyWhere)
-
 	float LaunchSpeed = 4000.f; // 100m/s
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
@@ -41,9 +38,9 @@ private:
 protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Satate");
-	EFiringState FiringState = EFiringState::Reloading;
+	EFiringState FiringState;
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UTankAimingCompoment();
 

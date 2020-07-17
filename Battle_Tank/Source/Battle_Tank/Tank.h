@@ -5,7 +5,7 @@
 
 #include "TankBarrel.h"
 #include "TankTurret.h"
-//#include "TankAimingCompoment.h"
+#include "TankAimingCompoment.h"
 #include "TankMoveComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
@@ -52,9 +52,9 @@ public:
 	//void AimAt(FVector HitLocation);
 	
 	//可以再蓝图被调用
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	/*UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
-	/*
+	
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetTurretReference(UTankTurret* TurretToSet);*/
 	//UFUNCTION(BlueprintCallable)
