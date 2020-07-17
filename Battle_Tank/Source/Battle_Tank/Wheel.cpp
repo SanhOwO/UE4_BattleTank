@@ -3,6 +3,22 @@
 
 #include "Wheel.h"
 
+UWheel::UWheel()
+{
+	PrimaryComponentTick.bCanEverTick = false;
+
+}
+
+void UWheel::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
+{
+	//修正飘逸 把单纯给轮子的力 分给主体
+	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
+	auto CorrectionAcceleration = - SlippageSpeed / DeltaTime * GetRightVector(); //速度除以time
+	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
+	auto CorrectionForce = (TankRoot->GetMass() * CorrectionAcceleration) / 2; //两个轮子
+	TankRoot->AddForce(CorrectionForce);
+}
+
 void UWheel::SetWheel(float wheel)
 {
 	auto ForceApply = GetForwardVector() * wheel * TrackMaxDrivingForce;
