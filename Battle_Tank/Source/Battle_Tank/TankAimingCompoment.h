@@ -35,6 +35,10 @@ private:
 
 	int ReloadTime = 3;
 	int LastTime = 0;
+	
+	FVector AimDirection;
+	bool bIsAimimg();
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Satate");

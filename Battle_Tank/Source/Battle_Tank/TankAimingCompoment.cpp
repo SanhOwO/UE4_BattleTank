@@ -20,13 +20,28 @@ UTankAimingCompoment::UTankAimingCompoment()
 void UTankAimingCompoment::BeginPlay()
 {
 	//Super::BeginPlay();
-	FiringState = EFiringState::Aiming;
+	//FiringState = EFiringState::Aiming;
 
 }
 
 void UTankAimingCompoment::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
-	
+	int NowTime = FPlatformTime::Seconds();
+	bool bIsReloaded = (NowTime - LastTime) < ReloadTime;
+	if (bIsReloaded)
+		FiringState = EFiringState::Reloading;
+	else if(!bIsAimimg())
+		FiringState = EFiringState::Locked;
+	else
+		FiringState = EFiringState::Aiming;
+}
+
+bool UTankAimingCompoment::bIsAimimg()
+{
+	if (!ensure(Barrel)) { UE_LOG(LogTemp, Error, TEXT("No Barriel Found"));  return true; }
+	FVector BarrelForwardVector = Barrel->GetForwardVector();
+	//UE_LOG(LogTemp, Warning, TEXT("%s, %s"), *BarrelForwardVector.ToString(), *AimDirection.ToString());
+	return !BarrelForwardVector.Equals(AimDirection, 0.1);
 }
 
 void UTankAimingCompoment::AimAt(FVector HitLocation)
@@ -57,7 +72,7 @@ void UTankAimingCompoment::AimAt(FVector HitLocation)
 		false
 	);
 	if (bHaveAimSolution) {
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		AimDirection = OutLaunchVelocity.GetSafeNormal();
 
 		MoveBarrel_TurretToward(AimDirection);
 
@@ -79,7 +94,7 @@ void UTankAimingCompoment::Initial(UTankBarrel* BarrelToSet, UTankTurret* Turret
 	Turret = TurretToSet;
 }
 
-void UTankAimingCompoment::MoveBarrel_TurretToward(FVector AimDirection)
+void UTankAimingCompoment::MoveBarrel_TurretToward(FVector HitDirection)
 {
 	if (!Barrel || !Turret) {
 		return;
@@ -87,7 +102,7 @@ void UTankAimingCompoment::MoveBarrel_TurretToward(FVector AimDirection)
 	auto BarrelRotation = Barrel->GetForwardVector().Rotation();
 	auto TurretRotation = Turret->GetForwardVector().Rotation();
 	//UE_LOG(LogTemp, Warning, TEXT("%s: TurretRotation"), *TurretRotation.ToString());
-	auto AimAsRotator = AimDirection.Rotation();
+	auto AimAsRotator = HitDirection.Rotation();
 	auto Barrel_DeltaRotator = AimAsRotator - BarrelRotation;
 	auto Turret_DeltaRotator = AimAsRotator - TurretRotation;
 	//Turret_DeltaRotator.Yaw = abs(AimAsRotator.Yaw) - TurretRotation.Yaw;
@@ -103,13 +118,13 @@ void UTankAimingCompoment::MoveBarrel_TurretToward(FVector AimDirection)
 void UTankAimingCompoment::Fire()
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Try to Fire"));
-	if (!Barrel) { UE_LOG(LogTemp, Warning, TEXT("Has no Barrel 102 ")); return; }
-	if (!ProjectileBluePrint) { UE_LOG(LogTemp, Warning, TEXT("Has no Projectile 103 ")); return; }
+	if (!ensure(Barrel)) { UE_LOG(LogTemp, Warning, TEXT("Has no Barrel 102 ")); return; }
+	if (!ensure(ProjectileBluePrint)) { UE_LOG(LogTemp, Warning, TEXT("Has no Projectile 103 ")); return; }
 
 	int NowTime = FPlatformTime::Seconds();
-	bool bIsReloaded = (NowTime - LastTime) > ReloadTime;
+	//bool bIsReloaded = (NowTime - LastTime) > ReloadTime;
 
-	if (bIsReloaded && Barrel) {
+	if (FiringState != EFiringState::Reloading) {
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBluePrint,
 			Barrel->GetSocketLocation(FName("Projectile")),

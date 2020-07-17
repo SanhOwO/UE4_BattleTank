@@ -6,7 +6,7 @@
 void AMyTankController::BeginPlay() {
 	Super::BeginPlay();
 	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingCompoment>();
-	if (AimingComponent) 
+	if (ensure(AimingComponent)) 
 		FoundAimingComponent(AimingComponent);
 	else
 		UE_LOG(LogTemp, Warning, TEXT("No Aiming Component 12"));
