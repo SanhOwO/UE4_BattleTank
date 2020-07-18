@@ -151,3 +151,8 @@ void UTankAimingCompoment::Fire()
 	//Projectile->LaunchProjectile(1000);
 
 }
+
+EFiringState UTankAimingCompoment::GetFiringState() const
+{
+	return FiringState;
+}

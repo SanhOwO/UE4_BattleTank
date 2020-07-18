@@ -16,9 +16,13 @@ void ATankAIController::Tick(float DeltaTime)
 	//auto PlayerTank = Cast<ATank>(PlayerPawn);
 
 	MoveToActor(PlayerPawn, AcceptanceRadius);
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingCompoment>();
+	AimingComponent->AimAt(PlayerPawn->GetActorLocation());
 
-	GetPawn()->FindComponentByClass<UTankAimingCompoment>()->AimAt(PlayerPawn->GetActorLocation());
-	GetPawn()->FindComponentByClass<UTankAimingCompoment>()->Fire();
+	if (AimingComponent->GetFiringState() == EFiringState::Locked) {
+		AimingComponent->Fire();
+	}
+		
 
 
 }
