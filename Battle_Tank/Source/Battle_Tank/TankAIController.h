@@ -16,6 +16,9 @@ class BATTLE_TANK_API ATankAIController : public AAIController
 	GENERATED_BODY()
 protected:
 	//APlayerController* PlayerController;
+	//AI离目标的最近距离
+	UPROPERTY(EditAnyWhere, Category = "Setup")
+	float AcceptanceRadius = 30.f;
 
 public:
 	virtual void BeginPlay() override;
@@ -23,6 +26,5 @@ public:
 
 private:
 	
-	//AI离目标的最近距离
-	float AcceptanceRadius = 30.f;
+
 };
