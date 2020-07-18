@@ -42,6 +42,7 @@ void UWheel::ApplySidewayForce()
 
 void UWheel::SetWheel(float w)
 {
+	//限制速度只能是-1至1
 	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + w, -1, 1);
 	//DriveWheel(CurrentThrottle);
 }

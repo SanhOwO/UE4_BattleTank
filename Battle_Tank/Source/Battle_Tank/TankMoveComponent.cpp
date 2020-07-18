@@ -56,7 +56,7 @@ void UTankMoveComponent::IntendTurnRight(float wheel)
 	}
 	//UE_LOG(LogTemp, Warning, TEXT("%s,%s load"), *RightWheel->GetName(), *LeftWheel->GetName());
 	RightWheel->SetWheel(wheel);
-	//LeftWheel->SetWheel(wheel);
+	//LeftWheel->SetWheel(0);
 }
 
 void UTankMoveComponent::IntendTurnLeft(float wheel)
@@ -69,7 +69,7 @@ void UTankMoveComponent::IntendTurnLeft(float wheel)
 		return;
 	}
 	//UE_LOG(LogTemp, Warning, TEXT("%s,%s load"), *RightWheel->GetName(), *LeftWheel->GetName());
-	//RightWheel->SetWheel(wheel);
+	//RightWheel->SetWheel(0);
 	LeftWheel->SetWheel(wheel);
 }
 

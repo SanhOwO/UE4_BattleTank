@@ -110,7 +110,15 @@ void UTankAimingCompoment::MoveBarrel_TurretToward(FVector HitDirection)
 
 
 	Barrel->Eleate(Barrel_DeltaRotator.Pitch);
-	Turret->Eleate(Turret_DeltaRotator.Yaw);
+	
+	//Alway yaw the shortest way
+	if (FMath::Abs(Turret_DeltaRotator.Yaw) < 180) {
+		Turret->Eleate(Turret_DeltaRotator.Yaw);
+	}
+	else {
+		Turret->Eleate(-Turret_DeltaRotator.Yaw);
+	}
+	
 
 	//UE_LOG(LogTemp, Error, TEXT("Turret: %s, AimRoatter: %s "), *TurretRotation.ToString(),*AimAsRotator.ToString());
 }
