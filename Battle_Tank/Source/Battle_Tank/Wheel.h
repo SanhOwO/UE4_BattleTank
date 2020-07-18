@@ -19,6 +19,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void SetWheel(float w);
 
+	
+
 	UPROPERTY(EditDefaultsOnly)
 	float TrackMaxDrivingForce = 400000.f; //40tone 1g acceleration
 	//UFUNCTION()
@@ -27,10 +29,12 @@ public:
 
 private:
 	virtual void BeginPlay() override;
+	void DriveWheel();
+	float CurrentThrottle = 0.f;
 	UWheel();
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
-	void ApplySidewayForce(float DeltaTime);
+	void ApplySidewayForce();
 	
 
 	UFUNCTION()

@@ -16,29 +16,39 @@ void UWheel::BeginPlay()
 
 void UWheel::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Hit hti"));
+	DriveWheel();
+	ApplySidewayForce();
+	CurrentThrottle = 0.f;
 }
 
 void UWheel::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
-	ApplySidewayForce(DeltaTime);
+	
 
 }
 
 
-void UWheel::ApplySidewayForce(float DeltaTime)
+void UWheel::ApplySidewayForce()
 {
 	//修复飘逸 把轮子的力传给主体
 	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
-	auto CorrectionAcceleration = -SlippageSpeed / DeltaTime * GetRightVector(); //�ٶȳ���time
+
+	auto DeltaTime = GetWorld()->GetDeltaSeconds();
+	auto CorrectionAcceleration = -SlippageSpeed / DeltaTime * GetRightVector(); //speed / time
 	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
-	auto CorrectionForce = (TankRoot->GetMass() * CorrectionAcceleration) / 2; //��������
+	auto CorrectionForce = (TankRoot->GetMass() * CorrectionAcceleration) / 2; //
 	TankRoot->AddForce(CorrectionForce);
 }	
 
 void UWheel::SetWheel(float w)
 {
-	auto ForceApply = GetForwardVector() * w * TrackMaxDrivingForce;
+	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + w, -1, 1);
+	//DriveWheel(CurrentThrottle);
+}
+
+void UWheel::DriveWheel()
+{
+	auto ForceApply = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
 	auto ForceLocation = GetComponentLocation();
 	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());	//查看 类查看器
 	TankRoot->AddForceAtLocation(ForceApply, ForceLocation);
