@@ -21,8 +21,13 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	float TrackMaxDrivingForce = 400000.f; //40tone 1g acceleration
+	//UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 
 private:
+	virtual void BeginPlay() override;
 	UWheel();
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
 };

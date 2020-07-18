@@ -9,6 +9,16 @@ UWheel::UWheel()
 
 }
 
+void UWheel::BeginPlay()
+{
+	OnComponentHit.AddDynamic(this, &UWheel::OnHit);
+}
+
+void UWheel::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Hit hti"));
+}
+
 void UWheel::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
 	//修复飘逸 把轮子的力传给主体
