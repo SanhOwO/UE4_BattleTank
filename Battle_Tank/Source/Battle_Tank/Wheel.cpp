@@ -21,18 +21,24 @@ void UWheel::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimi
 
 void UWheel::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
+	ApplySidewayForce(DeltaTime);
+
+}
+
+
+void UWheel::ApplySidewayForce(float DeltaTime)
+{
 	//修复飘逸 把轮子的力传给主体
 	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
 	auto CorrectionAcceleration = -SlippageSpeed / DeltaTime * GetRightVector(); //�ٶȳ���time
 	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
 	auto CorrectionForce = (TankRoot->GetMass() * CorrectionAcceleration) / 2; //��������
 	TankRoot->AddForce(CorrectionForce);
-}
+}	
 
-
-void UWheel::SetWheel(float wheel)
+void UWheel::SetWheel(float w)
 {
-	auto ForceApply = GetForwardVector() * wheel * TrackMaxDrivingForce;
+	auto ForceApply = GetForwardVector() * w * TrackMaxDrivingForce;
 	auto ForceLocation = GetComponentLocation();
 	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());	//查看 类查看器
 	TankRoot->AddForceAtLocation(ForceApply, ForceLocation);

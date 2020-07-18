@@ -17,12 +17,12 @@ class BATTLE_TANK_API UWheel : public UStaticMeshComponent
 public:
 	//-1 to 1
 	UFUNCTION(BlueprintCallable, Category = Input)
-	void SetWheel(float Wheel);
+	void SetWheel(float w);
 
 	UPROPERTY(EditDefaultsOnly)
 	float TrackMaxDrivingForce = 400000.f; //40tone 1g acceleration
 	//UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	
 
 
 private:
@@ -30,4 +30,9 @@ private:
 	UWheel();
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
+	void ApplySidewayForce(float DeltaTime);
+	
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };
