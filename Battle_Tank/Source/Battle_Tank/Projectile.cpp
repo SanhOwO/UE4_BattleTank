@@ -7,20 +7,21 @@
 AProjectile::AProjectile()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
  
 	CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
 	SetRootComponent(CollisionMesh);
 	CollisionMesh->SetNotifyRigidBodyCollision(true);
 
-	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>("Partical_Mesh");
-	LaunchBlast->AttachTo(CollisionMesh);    //将粒子效果绑定在根结点上（即ProjectileMesh）
-	//LaunchBlast->SetAutoActivate(true);                //创建好就启动
+	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>("Partial Mesh");
+	LaunchBlast->AttachToComponent(CollisionMesh, FAttachmentTransformRules::KeepRelativeTransform);    //将粒子效果绑定在根结点上（即CollisionMesh）
+	LaunchBlast->SetNotifyRigidBodyCollision(true);
 
-	//LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
-		//LaunchBlast->SetupAttachment(CollisionMesh);
-	//LaunchBlast->SetAutoActivate(false);
+	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>("ImpactBlast Mesh");
+	ImpactBlast->AttachToComponent(CollisionMesh, FAttachmentTransformRules::KeepRelativeTransform);
+	ImpactBlast->SetAutoActivate(false);               
+
 
 
 
