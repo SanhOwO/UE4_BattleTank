@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Particles/ParticleSystemComponent.h"
 #include "Projectile.h"
+#include "Particles/ParticleSystemComponent.h"
+
 
 // Sets default values
 AProjectile::AProjectile()
@@ -20,15 +21,14 @@ AProjectile::AProjectile()
 
 	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>("ImpactBlast Mesh");
 	ImpactBlast->AttachToComponent(CollisionMesh, FAttachmentTransformRules::KeepRelativeTransform);
-	ImpactBlast->SetAutoActivate(false);               
-
-
-
+	ImpactBlast->bAutoActivate = false;
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
 	ProjectileMovement->bAutoActivate = false;
 
-	
+	ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("ExplosionForce Mesh"));
+	ExplosionForce->AttachToComponent(CollisionMesh, FAttachmentTransformRules::KeepRelativeTransform);
+
 	//SetRootComponent(LaunchBlast);
 	//LaunchBlast->AttachToComponent(RootComponent);
 }
@@ -37,7 +37,17 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+	CollisionMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 	
+}
+
+
+void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Projectle Hit"));
+	LaunchBlast->Deactivate();
+	ImpactBlast->Activate(true);
+	ExplosionForce->FireImpulse();
 }
 
 // Called every frame
