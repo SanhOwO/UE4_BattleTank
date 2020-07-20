@@ -11,6 +11,7 @@ UWheel::UWheel()
 
 void UWheel::BeginPlay()
 {
+	Super::BeginPlay();
 	OnComponentHit.AddDynamic(this, &UWheel::OnHit);
 }
 

@@ -19,7 +19,7 @@ UTankAimingCompoment::UTankAimingCompoment()
 // Called when the game starts
 void UTankAimingCompoment::BeginPlay()
 {
-	//Super::BeginPlay();
+	Super::BeginPlay();
 	//FiringState = EFiringState::Aiming;
 
 }

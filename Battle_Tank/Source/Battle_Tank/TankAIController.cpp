@@ -18,7 +18,7 @@ void ATankAIController::Tick(float DeltaTime)
 		UE_LOG(LogTemp, Error, TEXT("AI didn't find Player tank")); 
 		return; 
 	}
-
+	 
 	//auto PlayerTank = Cast<ATank>(PlayerPawn);
 
 	MoveToActor(PlayerPawn, AcceptanceRadius);

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MyTankController.h"
-
+#include "Tank.h"
 
 void AMyTankController::BeginPlay() {
 	Super::BeginPlay();
@@ -19,6 +19,7 @@ void AMyTankController::Tick(float DeltaTime) {
 }
 
 void AMyTankController::AimTowardCorsshair() {
+	if (!GetOwner()) { return; }
 	FVector OutHitLocation;
 	if (GetSightRayHitLoaction(OutHitLocation)) {
 		//UE_LOG(LogTemp, Warning, TEXT("HitLocation£º %s"), *OutHitLocation.ToString());
@@ -65,4 +66,21 @@ bool AMyTankController::GetLookDirection(FVector2D ScreenLocation, FVector& Look
 	FVector WorldLocation;
 	DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldLocation, LookDircetion);
 	return true;
+}
+
+void AMyTankController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn) {
+		auto PossesedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossesedTank)) { return; }
+
+		PossesedTank->OnDeath.AddUniqueDynamic(this, &AMyTankController::OnPossedTankDeath);
+	}
+}
+
+void AMyTankController::OnPossedTankDeath()
+{
+	if (!ensure(GetPawn())) { return; }
+	StartSpectatingOnly();
 }
