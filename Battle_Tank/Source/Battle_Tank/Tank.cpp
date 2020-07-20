@@ -3,7 +3,6 @@
 
 #include "Tank.h"
 
-
 // Sets default values
 ATank::ATank()
 {
@@ -11,7 +10,6 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 
 }
-
 
 float ATank::GetTankHealth() const
 {
@@ -22,7 +20,7 @@ float ATank::GetTankHealth() const
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	CurrentHealth = StartingHealth;
 	//TankAimingConpoment = FindComponentByClass<UTankAimingCompoment>();
 }
 

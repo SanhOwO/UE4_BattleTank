@@ -21,8 +21,7 @@ class BATTLE_TANK_API ATank : public APawn
 private:
 
 	UTankBarrel* Barrel = nullptr;
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	int32 StartingHealth = 100;
+	
 
 	UPROPERTY(VisibleAnyWhere, Category = "Health")
 	int32 CurrentHealth = StartingHealth;
@@ -46,4 +45,7 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
 	FTankDelegate OnDeath;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int32 StartingHealth = 100;
 };
