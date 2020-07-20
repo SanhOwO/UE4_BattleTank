@@ -21,10 +21,11 @@ protected:
 	float AcceptanceRadius = 30.f;
 
 public:
-	virtual void BeginPlay() override;
-	virtual void Tick(float) override;
+
 
 private:
-	
+	virtual void BeginPlay() override;
+	virtual void Tick(float) override;
+	virtual void SetPawn(APawn* InPawn) override;
 
 };

@@ -2,7 +2,13 @@
 
 #include "TankAimingCompoment.h"
 #include "TankAIController.h"
+#include "Tank.h"
 
+void ATankAIController::BeginPlay() {
+	Super::BeginPlay();
+
+	UE_LOG(LogTemp, Warning, TEXT("AI Controller Begin Play"));
+}
 
 void ATankAIController::Tick(float DeltaTime)
 {
@@ -27,8 +33,15 @@ void ATankAIController::Tick(float DeltaTime)
 
 }
 
-void ATankAIController::BeginPlay() {
-	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("AI Controller Begin Play"));	
+void ATankAIController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn) {
+		auto PossesedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossesedTank)) { return; }
+
+
+	}
 }
+

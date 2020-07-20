@@ -2,7 +2,7 @@
 
 #pragma once
 
-
+#include "Projectile.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
 #include "TankAimingCompoment.h"
@@ -11,8 +11,7 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
-//class UTankBarrel;
-class AProjectile;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
 
 UCLASS()
 class BATTLE_TANK_API ATank : public APawn
@@ -21,26 +20,22 @@ class BATTLE_TANK_API ATank : public APawn
 
 private:
 
-	//UPROPERTY(EditAnyWhere,Category = Setup)
-	//UClass* ProjectileBluePrint;		
-	//TSubclassOf<AProjectile> ProjectileBluePrint; 
-
 	UTankBarrel* Barrel = nullptr;
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int32 StartingHealth = 100;
 
-	//int ReloadTime = 3;
-	//int LastTime = 0;
-
+	UPROPERTY(VisibleAnyWhere, Category = "Health")
+	int32 CurrentHealth = StartingHealth;
 
 protected:
-	//UPROPERTY(BlueprintReadOnly)
-	//UTankAimingCompoment* TankAimingConpoment = nullptr;
-
 	UPROPERTY(BlueprintReadOnly)
 	UTankMoveComponent* TankMoveComponent = nullptr;
 
 public:
 	// Sets default values for this pawn's properties
 	ATank();
+	UFUNCTION(BlueprintPure, Category = "Health")
+	float GetTankHealth() const;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -48,15 +43,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
-	//void AimAt(FVector HitLocation);
-	
-	//可以再蓝图被调用
-	/*UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-	
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetTurretReference(UTankTurret* TurretToSet);*/
-	//UFUNCTION(BlueprintCallable)
-	//void Fire();
+	FTankDelegate OnDeath;
 };
