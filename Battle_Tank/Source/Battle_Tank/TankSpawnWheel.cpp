@@ -13,9 +13,6 @@ ATankSpawnWheel::ATankSpawnWheel()
 	SetRootComponent(MassWheelsConstraint);
 	
 
-	Mass = CreateDefaultSubobject<UStaticMeshComponent>(FName("Mass"));
-	MassWheelsConstraint->SetupAttachment(MassWheelsConstraint);
-
 	Wheels = CreateDefaultSubobject<UStaticMeshComponent>(FName("Wheels"));
 	Wheels->SetupAttachment(MassWheelsConstraint);
 
@@ -26,13 +23,8 @@ ATankSpawnWheel::ATankSpawnWheel()
 void ATankSpawnWheel::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (GetAttachParentActor()) {
-		UE_LOG(LogTemp, Warning, TEXT("Not NUll"));
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("NULL"));
-	}
+	SetupConstraint();
+	
 }
 
 // Called every frame
@@ -40,5 +32,13 @@ void ATankSpawnWheel::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ATankSpawnWheel::SetupConstraint()
+{
+	if (!GetAttachParentActor())return;
+	UPrimitiveComponent* BodyRoot = Cast<UPrimitiveComponent>(GetAttachParentActor()->GetRootComponent());
+	if (!BodyRoot)return;
+	MassWheelsConstraint->SetConstrainedComponents(BodyRoot, NAME_None, Wheels, NAME_None);
 }
 
